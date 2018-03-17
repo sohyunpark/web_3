@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>1번</title>
+  </head>
+  <style>
+  .body{
+    margin: 5px 20px;
+    width: 70%;
+    height: 500px;
+  }
+  #setting, #drawing{
+    margin : 40px auto;
+    text-align: center;
+  }
+  #table{
+    height: 400px;
+    margin : 0 auto;
+  }
+  .Blue{
+    border: 2px solid blue;
+    font-size: 15px;
+    width: 60px;
+  }
+  .Green{
+    border: 2px solid Green;
+    font-size: 15px;
+    width: 60px;
+  }
+  .Draw{
+    border: 2px solid black;
+    width: 60px;
+  }
+  .Hallway{
+    border: 2px solid red;
+    font-size: 15px;
+    width: 60px;
+  }
+  </style>
+  <script type='text/javascript' src='jquery-1.11.0.min.js'></script>
+  <script>
+  var $width = null;
+  var $height = null;
+  var $create = null;
+  var $arrange = null;
+  var hallway = 0 ;
+  var width = 0;
+  var height = 0;
+
+// 좌석 생성
+  function drawing(h,w){
+    var $table = $("#table");
+    var $string = null;
+    hallway = parseInt(width/2);
+    for(var i=0;i<h;i++){
+      $string += "<tr>"
+      for(var l=0;l<w;l++){
+        $string +="<td></td>";
+      }
+      $string += "</tr>"
+    }
+    $table.append($string);
+    $("td").addClass("Draw");
+  }
+
+  // 랜덤 자리바꾸기
+  function random(people){
+    var num = 0;
+    var temp = '';
+    for(var i=0; i<people.length; i++){
+      num = Math.floor(Math.random()*(people.length));
+      temp = people[i];
+      people[i] = people[num];
+      people[num] = temp;
+    }
+    return people;
+  }
+
+  // 좌석수 입력받기
+  function btnClick1(){
+    $('tr').remove();
+    $width = $('#width');
+    $height = $('#height');
+    width = parseInt($width.val());
+    height = parseInt($height.val());
+
+    if((width%2) != 0){
+      alert("잘못된 값을 입력하셨습니다. (＃가로는 짝수값만 가능합니다.)")
+      return;
+    }else if((width * height) < 67){
+      console.log(width * height);
+      alert("잘못된 값을 입력하셨습니다. (＃전체좌석수는 인원보다 많아야합니다.)")
+      return;
+    }
+    drawing(height,width+1);
+  }
+
+  // 좌석지정
+  function btnClick2(){
+    var eleven = ['강지혜','권용수','권혁재','김설한','김성경','김성곤','김성민','김준호','김현수','류도연','박지용','서고은',
+  '서유진','손성준','손지웅','신우철','엄유진','오은주','오태경','이경진','이상현','이제학','이현호','이화윤','임재현','정재엽','지승훈'];
+    var twelve = ['강혜정','박소현','진민영','고하윤','김수진','최영롱','이경화','유희수','김윤지','조은솔','장진영','채유진','박보미',
+    '주형진','임혜성','정진','손원락','이경민','정광수','최준우','위재원','김진우','노종범','신종욱','백기반','장동주','허빛찬샘',
+    '성동원','이종건','은종현','이융성','최규호','우연찬','박민주','조현우','손혜성','이창주','이인성','김동범',
+    '오병준','김준혁','조국','차주현','김민재','김종주','김효상','이상훈','김주승','송현석','남동길'];
+
+    eleven = random(eleven);
+    twelve = random(twelve);
+
+    var $tr = $('tr');
+    var $td = $('td');
+    var count_11 = 21;
+    var count_12 = 36;
+    var hallway = parseInt(width/2);
+
+    // 복도 배치
+    for(var i=($tr.length-1);i>=0;i--){
+      if(i == 0){
+        $tr.eq(i).children().eq(hallway).text(eleven[0]).addClass("Hallway");
+      }else {
+        $tr.eq(i).children().eq(hallway).text("복도").addClass("Hallway");
+      }
+    }
+
+    // 사람 배치
+    var indexcount_11=1;
+    var indexcount_12=0;
+    for(var i=($tr.length-1);i>=0;i--){
+      for(var l=0; l<($tr[i].children.length); l++){
+        if(l == hallway){
+          continue;
+        }else if(indexcount_11 >= eleven.length){
+          $tr.eq(i).children().eq(l).text(twelve[indexcount_12]).removeClass("Draw").addClass("Green");
+          indexcount_12++;
+        }else if((l < hallway) && (l%2) == 0){
+          $tr.eq(i).children().eq(l).text(eleven[indexcount_11]).removeClass("Draw").addClass("Blue");
+          indexcount_11++;
+        }else if((l < hallway) && (l%2) != 0){
+          $tr.eq(i).children().eq(l).text(twelve[indexcount_12]).removeClass("Draw").addClass("Green");
+          indexcount_12++;
+        }else if((l > hallway) && (l%2) != 0){
+          $tr.eq(i).children().eq(l).text(eleven[indexcount_11]).removeClass("Draw").addClass("Blue");
+          indexcount_11++;
+        }else if((l > hallway) && (l%2) == 0){
+          $tr.eq(i).children().eq(l).text(twelve[indexcount_12]).removeClass("Draw").addClass("Green");
+          indexcount_12++;
+        }
+      }
+    }
+  }
+
+  $(document).ready(function(){
+    $create = $('#create');
+    $arrange = $("#arrange");
+
+    $create.on("click",function(){
+      btnClick1();
+    });
+
+    $arrange.on("click",function(){
+      btnClick2();
+    });
+
+  });
+  </script>
+  <body>
+    <div id="setting">
+      <span>세로</span>
+      <input type="text" id="height"/>
+      <span>가로</span>
+      <input type="text" id="width"/>
+      <button id="create">자리생성</button>
+      <button id="arrange">자리배치</button>
+    </div>
+    <div id="drawing">
+      <table id="table">
+      </table>
+    </div>
+  </body>
+</html>

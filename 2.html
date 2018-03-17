@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>2번</title>
+    <style>
+    </style>
+    <script type='text/javascript' src='jquery-1.11.0.min.js'></script>
+    <script>
+
+    function findEven(two,one){
+      var totlaCount = ((two - one) + 1);
+      var evenCount = 0
+      if( (totlaCount%2) == 0){
+        evenCount = Math.floor(totlaCount/2);
+      }else if(((totlaCount%2) != 0) && ((one%2) != 0)){
+        evenCount = Math.floor(totlaCount/2);
+      }else if(((totlaCount%2) != 0) && ((one%2) == 0)){
+        evenCount = Math.floor((totlaCount/2)+1);
+      }
+      document.write(one + " ~ " + two + " 짝수의 개수 = " + evenCount + "입니다.<br>");
+      sumEven(one,evenCount);
+    }
+
+    function sumEven(one,count){
+      var sum = 0;
+      if((one%2) != 0){
+        one += 1;
+      }
+      for(var i=0; i<count; i++){
+        sum += one;
+        one +=2;
+      }
+      document.write("짝수의 누적된 합 = " + sum + " 입니다.");
+    }
+
+    $(document).ready(function(){
+      var firstNum = prompt("첫번째 값을 입력주세요. (1의 자리)", "");
+      firstNum = parseInt(firstNum);
+      if(firstNum >= 10){
+        alert("잘못입력하셨습니다. (＃ 1의자리 숫자만 가능합니다.)")
+      }else{
+        var secondNum = prompt("두번째 값을 입력주세요. (100의 자리)", "");
+        secondNum = parseInt(secondNum);
+        if(secondNum < 100){
+          alert("잘못입력하셨습니다. (＃ 100의자리 숫자만 가능합니다.)")
+        }else{
+          findEven(secondNum,firstNum);
+        }
+      }
+    });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>

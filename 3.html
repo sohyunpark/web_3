@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+		<meta charset="utf-8">
+		<title>Ajax 테스트</title>
+		<meta name="keywords" content="">
+		<meta name="description" content="">
+	  <script src="jquery-1.11.0.min.js"></script>
+		<style>
+		</style>
+		<script type="text/javascript">
+    var $list = null;
+    var $array = null
+      $.ajax({
+        url: 'https://api.github.com/repositories',
+        type: 'GET',
+        dataType: 'json'
+      })
+			.done(function(json) {
+        $list = json;
+        console.log($list);
+			})
+			.fail(function(xhr, status, errorThrown) {
+			  console.log("데이터를 불러오는데 실패했습니다.");
+			})
+			.always(function(xhr, status) {
+			  console.log('완료')
+			});
+
+      function find(id){
+        var index = 0;
+        for(var i=0; i < $list.length ; i++){
+          if($list[i].id == id){
+            index = i;
+            $array = $list[index];
+            return index;
+          }else if(i==($list.length-1)){
+            alert("찾으시는 아이디는 없는 번호입니다.")
+          }
+        }
+      }
+
+      function print(index){
+        var $str = '';
+        $.each($array,function(key,value){
+          $str += "<li>";
+          $str += key;
+          $str += " = ";
+          $str += value;
+          $str += "</li>";
+        })
+        $("#list").append($str);
+      }
+
+      $(document).ready(function(){
+        $("#submit").on("click", function(){
+          var id = $("#id").val();
+          var index = find(id);
+          print(index);
+        })
+      });
+		</script>
+	</head>
+	<body>
+    <input type="text" id="id"/>
+    <input type="submit" id="submit" value="검색"/>
+    <ul id="list">
+    </ul>
+	</body>
+</html>
